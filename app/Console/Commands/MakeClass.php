@@ -12,7 +12,7 @@ class MakeClass extends Command
      *
      * @var string
      */
-    protected $signature = 'make:class {name}';
+    protected $signature = 'make:service {name}';
 
     /**
      * The console command description.
