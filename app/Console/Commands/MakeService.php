@@ -19,7 +19,7 @@ class MakeService extends Command
      *
      * @var string
      */
-    protected $description = 'This command makes a new class in the app/Services directory';
+    protected $description = 'This command makes a new service (class) in the app/Services directory';
 
     /**
      * Execute the console command.
