@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
-class MakeClass extends Command
+class MakeService extends Command
 {
     /**
      * The name and signature of the console command.
@@ -28,7 +28,7 @@ class MakeClass extends Command
     {
         $name = $this->argument('name');
         $path = app_path('Services/' . str_replace('\\', '/', $name) . '.php');
-        
+
         // Create the directory if it doesn't exist
         $directory = dirname($path);
         if (!is_dir($directory)) {
@@ -37,7 +37,7 @@ class MakeClass extends Command
 
         // Create the file
         $this->info('Creating ' . $name . ' class...');
-        if ($this->createFile($path)) {
+        if ($this->createFile($path, $name)) {
             $this->info('Class ' . $name . ' created successfully.');
         } else {
             $this->error('Class ' . $name . ' already exists.');
@@ -48,16 +48,17 @@ class MakeClass extends Command
      * Create the file at the given path.
      *
      * @param string $path
+     * @param string $name
      * @return bool
      */
-    protected function createFile($path)
+    protected function createFile($path, $name)
     {
         if (file_exists($path)) {
             return false;
         }
 
         $filesystem = new Filesystem();
-        $filesystem->put($path, $this->getClassTemplate());
+        $filesystem->put($path, $this->getClassTemplate($name));
 
         return true;
     }
@@ -65,10 +66,12 @@ class MakeClass extends Command
     /**
      * Get the class template.
      *
+     * @param string $name
      * @return string
      */
-    protected function getClassTemplate()
+    protected function getClassTemplate($name)
     {
-        return "<?php\n\nnamespace App\Services;\n\nclass NewClass\n{\n    //\n}\n";
+        $className = basename(str_replace('\\', '/', $name));
+        return "<?php\n\nnamespace App\Services;\n\nclass $className\n{\n    public function __construct()\n    {\n        //\n    }\n}\n";
     }
 }
